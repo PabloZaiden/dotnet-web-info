@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,8 +29,16 @@ namespace dotnet_web_info
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!" + Environment.NewLine);
-                await context.Response.WriteAsync($"The hostname is: {Environment.MachineName}" );
+                using (var process = new Process())
+                {
+                    process.StartInfo.FileName = "uptime";
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.Start();
+                    var uptime = process.StandardOutput.ReadToEnd();
+                    await context.Response.WriteAsync("Hello World!" + Environment.NewLine);
+                    await context.Response.WriteAsync($"The hostname is: {Environment.MachineName}" + Environment.NewLine );
+                    await context.Response.WriteAsync(uptime?.Trim());
+                }
             });
         }
     }
