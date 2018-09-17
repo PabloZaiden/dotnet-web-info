@@ -27,8 +27,8 @@ namespace dotnet_web_info
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!<br />");
-                await context.Response.WriteAsync($"The hostname is: {Environment.MachineName} <br />" );
+                await context.Response.WriteAsync("Hello World!" + Environment.NewLine);
+                await context.Response.WriteAsync($"The hostname is: {Environment.MachineName}" );
             });
         }
     }
